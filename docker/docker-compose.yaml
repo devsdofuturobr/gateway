@@ -1,0 +1,8 @@
+services:
+  customer:
+    build:
+      context: ..
+    image: washington1995luiz/gateway:0.0.1
+    ports:
+      - "9000:80"
+

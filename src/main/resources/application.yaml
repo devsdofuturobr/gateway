@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:9000}
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        ###################################################################################
+        ##########################  api-vendor  ###########################################
+        - id: api-vendor-main
+          uri: ${API_VENDOR:http://localhost:9001}
+          predicates:
+            - Path=/vendor
+          filters:
+            - RewritePath=/vendor, /api/v1/vendor
+        #   - AuthenticationFilter
+
+        - id: api-vendor
+          uri: ${API_VENDOR:http://localhost:9001}
+          predicates:
+            - Path=/vendor/**
+          filters:
+            - RewritePath=/vendor/(?<remaining>.*), /api/v1/vendor/${remaining}
+#            - AuthenticationFilter
+
+        ###################################################################################
+        ##########################  api-customer  ###########################################
+        - id: api-customer-main
+          uri: ${API_CUSTOMER:http://localhost:9002}
+          predicates:
+            - Path=/customer
+          filters:
+            - RewritePath=/customer, /api/v1/customer
+        #   - AuthenticationFilter
+
+        - id: api-customer
+          uri: ${API_CUSTOMER:http://localhost:9002}
+          predicates:
+            - Path=/customer/**
+          filters:
+            - RewritePath=/customer/(?<remaining>.*), /api/v1/customer/${remaining}
+#            - AuthenticationFilter
+
